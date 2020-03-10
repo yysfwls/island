@@ -1,17 +1,16 @@
-.chunk{
-  width: 150px;
-  height: 100px;
+.header{
+  display: flex;
+  flex-direction: row;
+  height: 100rpx;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f5; 
 }
-.container{
-  height: 50px;
-  background-color: #999;
+.epsoide{
+  margin-left: 20rpx;
+  margin-top: 4rpx;
 }
-.color1{
-  background-color: cadetblue;
-}
-.color2{
-  background-color: violet;
-}
-.color3{
-  background-color: wheat;
+.like{
+  margin-top: 6rpx;
 }
