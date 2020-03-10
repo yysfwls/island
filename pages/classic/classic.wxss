@@ -1,0 +1,17 @@
+.chunk{
+  width: 150px;
+  height: 100px;
+}
+.container{
+  height: 50px;
+  background-color: #999;
+}
+.color1{
+  background-color: cadetblue;
+}
+.color2{
+  background-color: violet;
+}
+.color3{
+  background-color: wheat;
+}
