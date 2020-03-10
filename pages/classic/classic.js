@@ -4,7 +4,9 @@ let classicModel = new ClassicModel()
 let likeModel = new LikeModel()
 Page({
   data: {
-
+    classic: null,
+    latest: true, 
+    first: false,
   },
   //事件处理函数
 
