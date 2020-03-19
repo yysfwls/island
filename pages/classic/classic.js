@@ -1,9 +1,6 @@
-import {
-  ClassicModel
-} from '../../models/classic.js'
-import {
-  LikeModel
-} from '../../models/like.js'
+import {ClassicModel} from '../../models/classic.js'
+import {LikeModel} from '../../models/like.js'
+
 let classicModel = new ClassicModel()
 let likeModel = new LikeModel()
 Page({
@@ -11,15 +8,19 @@ Page({
     classic: null,
     latest: true,
     first: false,
+    likeCount: 0,
+    likeStatus: false
   },
   //事件处理函数
 
   onLoad: function(options) {
     classicModel.getLatest((res) => {
       this.setData({
+        // ...res 使用扩展运算符class.wxml里不需要写"classic."
         classic: res,
+        likeCount: res.fav_nums,
+        likeStatus: res.like_status,
       })
-
     })
   },
 
@@ -37,11 +38,20 @@ Page({
   _updateClassic: function(nextOrPrevious) {
     let index = this.data.classic.index
     classicModel.getClassic(index, nextOrPrevious, (res) => {
-      // console.log(res, "sdasd");
+      this._getLikeStatus(res.id, res.type)
       this.setData({
         classic: res,
         latest: classicModel.isLatest(res.index),
         first: classicModel.isFrist(res.index)
+      })
+    })
+  },
+  _getLikeStatus: function(artID,category){
+    likeModel.getClassicLikeStatus(artID, category,
+    (res)=>{
+      this.setData({
+        likeCount:res.fav_nums,
+        likeStatus: res.like_status
       })
     })
   },

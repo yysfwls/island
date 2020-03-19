@@ -1,6 +1,4 @@
-import {
-  config
-} from '../config.js'
+import {config} from '../config.js'
 
 const tips = {
   1: '抱歉，出现了一个错误',
@@ -13,7 +11,7 @@ class HTTP {
     if (!params.method) {
       params.method = "GET"
     }
-    wx.request({
+    wx.request({  //访问api
       url: config.api_base_url + params.url,
       method: params.method,
       data: params.data,

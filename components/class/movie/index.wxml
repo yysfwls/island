@@ -1,4 +1,4 @@
-<view class="class-container">
+<view hidden="{{hidden}}" class="class-container">
   <image src="{{img}}" class="classic-img"></image>
   <image src="images/movie@tag.png" class="tag"></image>
   <text class="content">{{content}}</text>
