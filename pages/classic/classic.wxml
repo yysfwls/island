@@ -10,4 +10,6 @@
   <v-navi bind:left="onNext" bind:right="onPrevious" title="{{classic.title}}" first="{{first}}" latest="{{latest}}" class="navi" />
 </view>
 
-<!-- 频繁切换用hide -->
+<!-- 频繁切换用hide 始终被渲染 只是简单的控制简单隐藏 -->
+
+<!-- v-music wx:if内的取值为真 显示 -->
