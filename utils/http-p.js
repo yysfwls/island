@@ -8,13 +8,13 @@ const tips = {
 
 class HTTP {
   // 给外部调用
-  request:(url, data={}, method="GET"){
+  request({url, data={}, method='GET'}){
     return new Promise((resolve, reject)=>{
       this._request(url, resolve, reject, data, method)
     })
   }
   // HTTP内部调用
-  _request(url, resolve, reject, data={}, method="GET") {
+  _request(url, resolve, reject, data={}, method='GET') {
     wx.request({  //访问api
       url: config.api_base_url + url,
       method: method,
@@ -40,12 +40,18 @@ class HTTP {
     })
   }
   _show_error(error_code){
+    if (!error_code) {
+      error_code = 1
+    }
+    const tip = tips[error_code]
     wx.showToast({
-      title: tips[error_code],
+      title: tip?tip:tips[1],
       icon: 'none',
       duration: 2000
     })
   }
+
+
 }
 export {
   HTTP
