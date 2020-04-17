@@ -1,6 +1,10 @@
 // pages/book-detail/book-detail.js
 import { BookModel } from "../../models//book.js";
+import { LikeModel } from "../../models//like.js";
+
 const bookModel = new BookModel();
+const likeModel = new LikeModel();
+
 
 Page({
   /**
@@ -11,6 +15,7 @@ Page({
     book: null,
     likeStatus: false,
     likeCount: 0,
+    posting: false
   },
 
   /**
@@ -23,25 +28,31 @@ Page({
     const likeStatus = bookModel.getLikeStatus(bid);
 
     detail.then((res) => {
-      console.log(res)
       this.setData({
         book: res,
       });
     });
     comments.then((res) => {
-      console.log(res,"@@@@@@@@@@@@@@")
       this.setData({
         comments: res.comments,
       });
     });
     likeStatus.then((res) => {
-      console.log(res)
       this.setData({
         likeStatus: res.like_status,
-        likeCount: res.like_nums,
+        likeCount: res.fav_nums,
       });
     });
   },
+  onLike(event) {
+    const like_or_cancal = event.detail.behavior
+    likeModel.like(like_or_cancal, this.data.book.id, 400)
+  },
+  onFakePost(){
+    this.setData({
+      posting: true
+    })
+  }
 
   /**
    * 生命周期函数--监听页面初次渲染完成
