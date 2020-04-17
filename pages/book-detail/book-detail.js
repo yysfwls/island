@@ -5,7 +5,6 @@ import { LikeModel } from "../../models//like.js";
 const bookModel = new BookModel();
 const likeModel = new LikeModel();
 
-
 Page({
   /**
    * 页面的初始数据
@@ -15,7 +14,7 @@ Page({
     book: null,
     likeStatus: false,
     likeCount: 0,
-    posting: false
+    posting: false,
   },
 
   /**
@@ -45,14 +44,46 @@ Page({
     });
   },
   onLike(event) {
-    const like_or_cancal = event.detail.behavior
-    likeModel.like(like_or_cancal, this.data.book.id, 400)
+    const like_or_cancal = event.detail.behavior;
+    likeModel.like(like_or_cancal, this.data.book.id, 400);
   },
-  onFakePost(){
+  onFakePost() {
     this.setData({
-      posting: true
-    })
-  }
+      posting: true,
+    });
+  },
+  onCancel(event) {
+    this.setData({
+      posting: false,
+    });
+  },
+  onPost(event) {
+    const comment = event.detail.text || event.detail.value;
+    if (comment.length > 12) {
+      wx.showToast({
+        title: "短评最多12字",
+        icon: "none",
+      });
+      return;
+    }
+    if (!comment) {
+      return 
+    }
+    bookModel.postComment(this.data.book.id, comment).then((res) => {
+      wx.showToast({
+        title: "+ 1",
+        icon: "none",
+      });
+      this.data.comments.unshift({
+        content: comment,
+        nums: 1,
+      });
+      this.setData({
+        comments:this.data.comments,
+        posting:false
+      })
+    });
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

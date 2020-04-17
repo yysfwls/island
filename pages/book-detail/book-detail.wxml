@@ -7,9 +7,11 @@
     </view>
     <view class="sub-container">
         <text class="headline">短评</text>
+        <text class="shadow" wx:if="{{comments==false}}">还没有短评</text>
+
         <view class="comment-container">
             <block wx:key="comments" wx:for="{{util.limit(comments, 5)}}">
-                <v-tag tag-class="{{index==0?'ex-tag1':'' || index==1?'ex-tag2':''}}" text="{{item.content}}">
+                <v-tag tag-class="{{tool.highlight(index)}}" text="{{item.content}}">
                     <text class="num" slot="after">{{'+'+item.nums}}</text>
                 </v-tag>
             </block>
@@ -39,7 +41,7 @@
         </view>
     </view>
 </view>
-<view class="post-container">
+<view class="post-container" wx:if="{{!posting}}">
     <view bind:tap="onFakePost" class="post-fake">
         <text>输入短评</text>
     </view>
@@ -47,12 +49,33 @@
         <v-like bind:like="onLike" class="like" like="{{likeStatus}}" count="{{likeCount}}" />
     </view>
 </view>
-
-<view class="posting-container">
+<view class="posting-container" wx:if="{{posting}}">
     <view class="post-header">
-        <text>仅可点击标签+1</text>
-        <text class="cancal">取消</text>
+        <text wx:if="{{comments==true}}">仅可点击标签+1</text>
+        <text wx:else>暂无短评</text>
+        <text class="cancal" bind:tap="onCancel">取消</text>
     </view>
-    <view class="comment-container"></view>
-    <input class="post" placeholder="短评最多12个字"></input>
+    <view class="comment-container">
+        <block wx:key="comments" wx:for="{{util.limit(comments, 3)}}">
+            <v-tag bind:tapping="onPost" tag-class="{{tool.highlight(index)}}" text="{{item.content}}">
+                <text class="num" slot="after">{{'+'+item.nums}}</text>
+            </v-tag>
+        </block>
+    </view>
+    <input bindconfirm="onPost" class="post" placeholder="短评最多12个字"></input>
 </view>
+<v-mask wx:if="{{posting}}"/>
+<wxs module="tool">
+    var highlight = function(index){
+        if(index==0){
+            return 'ex-tag1'
+        }
+        if(index==1){
+            return 'ex-tag2'
+        }
+        return ''
+    }
+    module.exports = {
+        highlight:highlight
+    }
+</wxs>
