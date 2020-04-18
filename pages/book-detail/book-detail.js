@@ -21,27 +21,42 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading();
     const bid = options.bid;
     const detail = bookModel.getDetail(bid);
     const comments = bookModel.getComments(bid);
     const likeStatus = bookModel.getLikeStatus(bid);
 
-    detail.then((res) => {
+    // .race() 任何一个子完成之后马上执行回调
+    // .all() 全部完成之后才执行回调
+    Promise.all([detail, comments, likeStatus]).then(res => {
       this.setData({
-        book: res,
-      });
+        book: res[0],
+        comments: res[1].comments,
+        likeStatus: res[2].like_status,
+        likeCount: res[2].fav_nums
+      })
+      wx.hideLoading()
     });
-    comments.then((res) => {
-      this.setData({
-        comments: res.comments,
-      });
-    });
-    likeStatus.then((res) => {
-      this.setData({
-        likeStatus: res.like_status,
-        likeCount: res.fav_nums,
-      });
-    });
+
+    // detail.then((res) => {
+    //   this.setData({
+    //     book: res,
+    //   });
+    // });
+    // comments.then((res) => {
+    //   this.setData({
+    //     comments: res.comments,
+    //   });
+    // });
+    // likeStatus.then((res) => {
+    //   this.setData({
+    //     likeStatus: res.like_status,
+    //     likeCount: res.fav_nums,
+    //   });
+    // });
+    // 同时发送3个请求，串行
+    // 2s 2s 2s 服务器多线程
   },
   onLike(event) {
     const like_or_cancal = event.detail.behavior;
@@ -67,7 +82,7 @@ Page({
       return;
     }
     if (!comment) {
-      return 
+      return;
     }
     bookModel.postComment(this.data.book.id, comment).then((res) => {
       wx.showToast({
@@ -79,9 +94,9 @@ Page({
         nums: 1,
       });
       this.setData({
-        comments:this.data.comments,
-        posting:false
-      })
+        comments: this.data.comments,
+        posting: false,
+      });
     });
   },
 

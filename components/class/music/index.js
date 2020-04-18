@@ -66,7 +66,7 @@ Component({
       }
     },
     _monitorSwitch: function() {
-      mMgr.onplay(() => {
+      mMgr.onPlay(() => {
         // 播放
         this._recoverStatus()
       });

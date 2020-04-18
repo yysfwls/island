@@ -62,6 +62,13 @@
 					"pathName": "pages/book-detail/book-detail",
 					"query": "bid=8",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "book",
+					"pathName": "pages/book/book",
+					"query": "",
+					"scene": null
 				}
 			]
 		}
