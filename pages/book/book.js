@@ -1,5 +1,7 @@
 // pages/book/book.js
 import { BookModel } from "../../models/book.js";
+import { random } from "../../utils/common.js";
+
 const bookModel = new BookModel();
 Page({
   /**
@@ -32,6 +34,15 @@ Page({
     });
   },
   /**
+   * 页面上拉触底事件的处理函数,,,如何向组件发送通知
+   */
+  onReachBottom() {
+    // 发送触底通知给search组件，用properties
+    this.setData({ 
+      more: random(16) 
+    });
+  },
+  /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {},
@@ -55,11 +66,6 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
