@@ -2,7 +2,7 @@
     <view class="header">
         <view class="search-container">
             <image class="icon" src="images/search.png" />
-            <input placeholder-class="in-bar" placeholder='书籍名称' class="bar" auto-focus="{{true}}" />
+            <input bind:confirm="onConfirm" placeholder-class="in-bar" placeholder='书籍名称' class="bar" auto-focus="{{true}}" />
             <!-- auto-focus自动聚焦 -->
             <image class="cancel-img" src="images/cancel.png" />
         </view>
@@ -14,11 +14,21 @@
                 <view class="chunk"></view>
                 <text>历史搜索</text>
             </view>
+            <view class="tags">
+                <block wx:key=" " wx:for="{{historyWords}}">
+                    <v-tag text="{{item}}" />
+                </block>
+            </view>
         </view>
         <view class="history hot-search">
             <view class="title">
                 <view class="chunk"></view>
                 <text>热门搜索</text>
+            </view>
+            <view class="tags">
+                <block wx:key=" " wx:for="{{hotWords}}">
+                    <v-tag bind:tapping="onConfirm" text="{{item}}" />
+                </block>
             </view>
         </view>
     </view>
