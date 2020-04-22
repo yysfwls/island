@@ -1,6 +1,7 @@
 // components/search/index.js
 import { KeywordModel } from "../../models/keyword.js";
 import { BookModel } from "../../models/book.js";
+import { paginationBev } from "../behaviors/pagination.js";
 
 const keywordModel = new KeywordModel();
 const bookModel = new BookModel();
@@ -9,13 +10,13 @@ Component({
   /**
    * 组件的属性列表
    */
+  behaviors: [paginationBev],
+
   properties: {
     more: {
-      type:String,
-      observer:'_load_more',
-      
+      type: String,
+      observer: "_load_more",
     },
-    
   },
 
   /**
@@ -27,6 +28,7 @@ Component({
     dataArray: [],
     searching: false,
     q: "",
+    loading: false,
   },
 
   attached() {
@@ -46,8 +48,20 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    _load_more(){
-      console.log(111111)
+    _load_more() {
+      if (!this.data.q) {
+        return;
+      }
+      if (this.data.loading) {
+        return;
+      }
+      if (this.hasMore()) {
+        this.data.loading = true;
+        bookModel.search(this.getCurrentStart(), this.data.q).then((res) => {
+          this.setMoreData(res.books);
+          this.data.loading = false;
+        });
+      }
     },
     onCancel(event) {
       this.triggerEvent("cancel", {}, {});
@@ -67,7 +81,7 @@ Component({
       bookModel.search(0, q).then((res) => {
         this.setData({
           dataArray: res.books,
-          q
+          q,
         });
         keywordModel.addToHistory(q);
       });
