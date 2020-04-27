@@ -29,6 +29,7 @@ Component({
     searching: false,
     q: "",
     loading: false,
+    loadingCenter: false,
   },
 
   attached() {
@@ -52,30 +53,38 @@ Component({
       if (!this.data.q) {
         return;
       }
-      if (this.data.loading) {
+      if (this.isLocked()) {
         return;
       }
       if (this.hasMore()) {
-        this.data.loading = true;
-        bookModel.search(this.getCurrentStart(), this.data.q).then((res) => {
-          this.setMoreData(res.books);
-          this.data.loading = false;
-        });
+        this.locked();
+        bookModel.search(this.getCurrentStart(), this.data.q)
+          .then((res) => {
+            this.setMoreData(res.books);
+            this.unLocked()
+          },()=>{
+            this.unLocked()
+          });
+          //死锁
       }
     },
+
     onCancel(event) {
+      this.initialize()
       this.triggerEvent("cancel", {}, {});
+
     },
     onDelete(event) {
-      console.log("zz");
-      this.setData({
+      this.initialize()
+      this.setData({ 
         searching: false,
+        q: ""
       });
     },
+    // 初始化加载
     onConfirm(event) {
-      this.setData({
-        searching: true,
-      });
+      this._showResult()
+      this._showLoadingCenter()
       const q = event.detail.text || event.detail.value;
       this.setData({ q });
       bookModel.search(0, q).then((res) => {
@@ -84,7 +93,23 @@ Component({
           q,
         });
         keywordModel.addToHistory(q);
+        this._hideLoadingCenter()
       });
+    },
+    _showLoadingCenter(){
+      this.setData({
+        loadingCenter:true
+      })
+    },
+    _hideLoadingCenter(){
+      this.setData({
+        loadingCenter:false
+      })
+    },
+    _showResult(){
+      this.setData({
+        searching: true
+      })
     },
   },
 });
