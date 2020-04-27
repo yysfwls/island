@@ -1,6 +1,16 @@
 <view class="container">
     <image src="/images/my/my@bg.png" class="bg" ></image>
-    <open-data type="userAvatarUrl" />
+    <!-- <open-data type="userAvatarUrl" class="avatar avatar-position"/> -->
+    <v-button wx:if="{{!authorized}}" class="avatar-container avatar-position"
+        open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">
+        <image slot="img" class="avatar" src="/images/my/my.png" />
+    </v-button>
+    <view wx:if="{{authorized}}"
+        class="avatar-container avatar-position">
+        <image src="{{userInfo.avatarUrl}}" class="avatar" />
+        <text>{{userInfo.nickName}}</text>
+    </view>
+
     <view class="about-container">
         <view class="about-us">
             <image src="/images/my/about.png" />
@@ -13,4 +23,5 @@
         <!-- 获取用户信息 -->
         <!-- 不需要用户授权的方式， -->
     </view>
+    <!-- <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权</button> -->
 </view>
